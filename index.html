@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<!-- saved from url=(0037)https://bitnenfer.com/dev/flappy-boy/ -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<title>Leap O' Fate</title>
 <!--
 
  JSGB v0.02 - a JavaScript Nintendo GameBoy Emulator
@@ -19,110 +14,116 @@
  GNU General Public License for more details.
 
 -->
-<script src="./JSGB/toolbox.js" type="application/x-javascript"></script>
-<script src="./JSGB/scrollbar.js" type="application/x-javascript"></script>
-<script src="./JSGB/jsgb.cpu.js" type="application/x-javascript"></script>
-<script src="./JSGB/jsgb.memory.js" type="application/x-javascript"></script>
-<script src="./JSGB/jsgb.rom.js" type="application/x-javascript"></script>
-<script src="./JSGB/jsgb.interrupts.js" type="application/x-javascript"></script>
-<script src="./JSGB/jsgb.input.js" type="application/x-javascript"></script>
-<script src="./JSGB/jsgb.lcd.js" type="application/x-javascript"></script>
-<script src="./JSGB/jsgb.timers.js" type="application/x-javascript"></script>
-<script src="./JSGB/jsgb.debugger.js" type="application/x-javascript"></script>
-<script src="./JSGB/jsgb.gameboy.js" type="application/x-javascript"></script>
-<link href="./JSGB/jsgb.styles.css" rel="stylesheet" type="text/css">
-<link rel="icon" type="image/x-icon" href="./ico.gif">
+
+<!-- saved from url=(0037)https://bitnenfer.com/dev/flappy-boy/ -->
+
+<!DOCTYPE html>
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Leap O' Fate</title>
+  <script src="./JSGB/toolbox.js" type="application/x-javascript"></script>
+  <script src="./JSGB/scrollbar.js" type="application/x-javascript"></script>
+  <script src="./JSGB/jsgb.cpu.js" type="application/x-javascript"></script>
+  <script src="./JSGB/jsgb.memory.js" type="application/x-javascript"></script>
+  <script src="./JSGB/jsgb.rom.js" type="application/x-javascript"></script>
+  <script src="./JSGB/jsgb.interrupts.js" type="application/x-javascript"></script>
+  <script src="./JSGB/jsgb.input.js" type="application/x-javascript"></script>
+  <script src="./JSGB/jsgb.lcd.js" type="application/x-javascript"></script>
+  <script src="./JSGB/jsgb.timers.js" type="application/x-javascript"></script>
+  <script src="./JSGB/jsgb.debugger.js" type="application/x-javascript"></script>
+  <script src="./JSGB/jsgb.gameboy.js" type="application/x-javascript"></script>
+  <link href="./JSGB/jsgb.styles.css" rel="stylesheet" type="text/css">
+  <link rel="icon" type="image/x-icon" href="./ico.gif">
 </head>
 <body>
+  <div class="C">
+    <canvas style="display:none;" id="LCD" width="160" height="144"></canvas>
+    <canvas id="BUFFER" width="640" height="576"></canvas>
 
-<div class="C">
+    <div>
+      <a href="https://github.com/panpov/leap-o-fate" target="_blank">View Source</a> | <a href="https://github.com/panpov/panpov.github.io/blob/main/roms/game.gb">Download ROM</a>
+    </div>
+  </div>
 
-<canvas style="display:none;" id="LCD" width="160" height="144"></canvas>
-<canvas id="BUFFER" width="640" height="576"></canvas>
+  <div id="FOOTER" class="CLR C">
+    <div class="IB L">
+      <strong>Controls</strong><br>
+      <strong>X</strong>: Button A<br>
+      <strong>Z</strong>: Button B<br>
+      <strong>A</strong>: Start<br>
+      <strong>S</strong>: Select<br>
+      <strong>Arrow Keys</strong>: ← ↑ → ↓
+    </div>
+  </div>
 
-<div><a href="https://github.com/panpov/leap-o-fate">View Source</a> | <a href="uh">Download ROM</a></div>
+  <script type="application/x-javascript">
 
-</div>
+  var gbSeconds = 0;
+  var gbFrames  = 0;
+  var canvas;
+  var ctx;
 
-
-<div id="FOOTER" class="CLR C">
-<div class="IB L">
-<strong>X</strong>: Button A<br>
-<strong>Z</strong>: Button B<br>
-<strong>A</strong>: Start<br>
-<strong>S</strong>: Select<br>
-<strong>← ↑ → ↓</strong>
-</div>
-<br>
-<br>
-</div>
-
-<script type="application/x-javascript">
-
-var gbSeconds = 0;
-var gbFrames  = 0;
-var canvas;
-var ctx;
-
-function gb_Resize_LCD() {
-  if ($('BX').value=='Size x2') {
-    $('BX').value='Size x3';
-    $('LCD').style.width='320px';
-    $('LCD').style.height='288px';
+  function gb_Resize_LCD() {
+    if ($('BX').value=='Size x2') {
+      $('BX').value='Size x3';
+      $('LCD').style.width='320px';
+      $('LCD').style.height='288px';
+    }
+    else if ($('BX').value=='Size x3') {
+      
+    }
+    else {
+      $('BX').value='Size x2';
+      $('LCD').style.width='160px';
+      $('LCD').style.height='144px';
+    }
   }
-  else if ($('BX').value=='Size x3') {
+
+  function gb_Show_Fps() {
+    /*gbFrames+=gbFPS;
+    gbSeconds++;
+    $('STATUS').innerHTML = 
+      'Running: '+gbFPS+' '+
+      'fps - Average: '+(gbFrames/gbSeconds).toFixed(2)+' - '+
+      'Bank switches/s: '+gbBankSwitchCount;
+    gbFPS=0;
+    gbBankSwitchCount=0;*/
+  }
+
+  function gb_Toggle_Debugger(show) {
+    $('DEBUGGER').style.height=(show)?'auto':'0px';
+  }
+
+  function run () {
+    requestAnimationFrame(run);
     
+    ctx.imageSmoothingEnabled = false;
+    ctx.oImageSmoothingEnabled = false;
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.save();
+    ctx.scale(4, 4);
+    ctx.drawImage(gbLCDCtx.canvas, 0, 0);
+    ctx.restore();
   }
-  else {
-    $('BX').value='Size x2';
-    $('LCD').style.width='160px';
-    $('LCD').style.height='144px';
+
+  window.onload = function() {
+    canvas = document.getElementById("BUFFER"),
+    ctx = canvas.getContext('2d');
+    gb_Insert_Cartridge('game.gb', false);
+    gb_Run();
+    run();
   }
-}
 
-function gb_Show_Fps() {
-  /*gbFrames+=gbFPS;
-  gbSeconds++;
-  $('STATUS').innerHTML = 
-    'Running: '+gbFPS+' '+
-    'fps - Average: '+(gbFrames/gbSeconds).toFixed(2)+' - '+
-    'Bank switches/s: '+gbBankSwitchCount;
-  gbFPS=0;
-  gbBankSwitchCount=0;*/
-}
+  </script>
 
-function gb_Toggle_Debugger(show) {
-  $('DEBUGGER').style.height=(show)?'auto':'0px';
-}
-
-function run () {
-	requestAnimationFrame(run);
-	
-	ctx.imageSmoothingEnabled = false;
-	ctx.oImageSmoothingEnabled = false;
-	ctx.mozImageSmoothingEnabled = false;
-	ctx.webkitImageSmoothingEnabled = false;
-	ctx.save();
-	ctx.scale(4, 4);
-	ctx.drawImage(gbLCDCtx.canvas, 0, 0);
-	ctx.restore();
-}
-
-
-window.onload = function() {
-	canvas = document.getElementById("BUFFER"),
-	ctx = canvas.getContext('2d');
-  gb_Insert_Cartridge('game.gb', false);
-  gb_Run();
-  run();
-}
-
-</script>
 <center>
-<footer style="bottom:0px; position: fixed;width:100%; padding-bottom: 20px;">
-<a href="http://sourceforge.net/projects/jsgbemu/" target="_blank">Powered by JSGB v.0.02: a JavaScript Nintendo GameBoy Emulator and Debugger</a>
-</footer>
-</center>
+  <footer style="bottom:0px; position: fixed;width:100%; padding-bottom: 20px;">
+    Powered by JSGB v.0.02: a JavaScript Nintendo GameBoy Emulator and Debugger
+    <br>
+  <a href="https://sourceforge.net/projects/jsgbemu/" target="_blank">SourceForge</a> | <a href="https://github.com/pladaria/JSGB">GitHub</a>
+  </footer>
+  </center>
 
-
-</body></html>
+</body>
+</html>
