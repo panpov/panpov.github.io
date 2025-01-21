@@ -38,13 +38,13 @@ function gb_OnKeyDown_Event(e) {
     // right
     case 39: gbPin14&=0xFE; MEMW(_IF_,gbRegIF|16); e.preventDefault(); return;    
     // start
-    case 65: gbPin15&=0xF7; MEMW(_IF_,gbRegIF|16); e.preventDefault(); return;
+    case 13: gbPin15&=0xF7; MEMW(_IF_,gbRegIF|16); e.preventDefault(); return;
     // select
-    case 83: gbPin15&=0xFB; MEMW(_IF_,gbRegIF|16); e.preventDefault(); return;
+    case 16: gbPin15&=0xFB; MEMW(_IF_,gbRegIF|16); e.preventDefault(); return;
     // button B
-    case 90: gbPin15&=0xFD; MEMW(_IF_,gbRegIF|16); e.preventDefault(); return;
+    case 95: gbPin15&=0xFD; MEMW(_IF_,gbRegIF|16); e.preventDefault(); return;
     // button A
-    case 88: gbPin15&=0xFE; MEMW(_IF_,gbRegIF|16); e.preventDefault(); return;
+    case 83: gbPin15&=0xFE; MEMW(_IF_,gbRegIF|16); e.preventDefault(); return;
   }
 }
 
